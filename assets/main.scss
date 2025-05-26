@@ -1,0 +1,15 @@
+:root {
+  --primary-color: #00c58e;
+  --secondary-color: #2f495e;
+  --heading-color: #1a365d;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+a {
+  color: var(--primary-color);
+}
