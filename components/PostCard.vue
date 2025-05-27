@@ -9,6 +9,7 @@
 </template>
 
 
+
 <script setup>
 defineProps({
     post: {
@@ -17,4 +18,5 @@ defineProps({
     }
 })
 </script>
+
 

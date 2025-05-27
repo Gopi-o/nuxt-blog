@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-container">
         <Header />
         
         <main class="main-page">
@@ -71,4 +71,6 @@ const latestPosts = computed(() => posts.value || [])
         }
     }
     }
+
+    @import "/assets/main.scss"
 </style>
