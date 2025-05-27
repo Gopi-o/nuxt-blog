@@ -17,7 +17,7 @@
                 />
             </div>
 
-            <NuxtLink to="/" class=main-page__all-links>
+            <NuxtLink to="/posts" class=main-page__all-links>
                 Все посты ->
             </NuxtLink>
         </main>
@@ -27,7 +27,7 @@
 <script setup>
 const {data: posts, pending } = await useAsyncData(
     'main-posts',
-    () => $fetch('http://localhost:3001/posts?_sort=createdAt&_order=desc&_limit=3')
+    () => $fetch(`http://localhost:3001/posts?_sort=createdAt&_order=desc&_limit=3`)
 )
 
 const latestPosts = computed(() => posts.value || [])
