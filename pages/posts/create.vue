@@ -1,42 +1,66 @@
 <template>
+  <Header />
   <div class="create-page">
-    <Header />
     
-    <h1>Создать новый пост</h1>
-    
-    <form @submit.prevent="submitForm" class="post-form">
-      <div class="form-group">
-        <label for="title">Заголовок:</label>
-        <input 
-          v-model="formData.title" 
-          type="text" 
-          id="title" 
-          required
-          class="form-input"
-        >
-      </div>
+    <div class="create-container">
+      <h1 class="page-title">Создать новый пост</h1>
       
-      <div class="form-group">
-        <label for="body">Содержание:</label>
-        <textarea 
-          v-model="formData.body" 
-          id="body" 
-          required
-          class="form-textarea"
-        ></textarea>
-      </div>
-      
-      <button type="submit" class="submit-btn">Создать пост</button>
-      
-      <NuxtLink to="/posts" class="cancel-link">Отмена</NuxtLink>
-    </form>
+      <form @submit.prevent="submitForm" class="post-form">
+        <div class="form-group">
+          <label for="title" class="form-label">Заголовок</label>
+          <input 
+            v-model="formData.title" 
+            type="text" 
+            id="title" 
+            required
+            class="form-input"
+            placeholder="Введите заголовок поста"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="body" class="form-label">Содержание</label>
+          <textarea 
+            v-model="formData.body" 
+            id="body" 
+            required
+            class="form-textarea"
+            placeholder="Напишите содержание вашего поста..."
+            rows="8"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="tags" class="form-label">Теги (через запятую)</label>
+          <input 
+            v-model="formData.tags" 
+            type="text" 
+            id="tags" 
+            class="form-input"
+            placeholder="Unreal Engine, Графика, Геймдизайн"
+          >
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-plus-circle"></i> Опубликовать
+          </button>
+          
+          <NuxtLink to="/posts" class="cancel-btn">
+            <i class="fas fa-times"></i> Отмена
+          </NuxtLink>
+        </div>
+      </form>
+    </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
 const formData = reactive({
   title: '',
-  body: ''
+  body: '',
+  tags: ''
 })
 
 const router = useRouter()
@@ -46,9 +70,18 @@ const submitForm = async () => {
     await $fetch('http://localhost:3001/posts', {
       method: 'POST',
       body: {
-        ...formData,
-        createdAt: new Date().toISOString(),
-        id: Date.now() // Временное решение, json-server сам генерирует ID
+        title: formData.title,
+        body: formData.body,
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+        author: "Новый пользователь",
+        date: {
+          day: new Date().getDate(),
+          month: new Date().toLocaleString('default', { month: 'short' }),
+          year: new Date().getFullYear()
+        },
+        likes: 0,
+        comments: 0,
+        views: 0
       }
     })
     
@@ -58,6 +91,7 @@ const submitForm = async () => {
     alert('Не удалось создать пост')
   }
 }
+
 </script>
 
 <style scoped lang="scss">

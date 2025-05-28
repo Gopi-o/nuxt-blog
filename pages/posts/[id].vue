@@ -9,12 +9,75 @@
     
     <!-- Пост найден -->
     <div v-else-if="post">
-      <h1>{{ post.title }}</h1>
-      <p>{{ post.body }}</p>
+      <div class="post-detail">
+        <div class="post-header">
+          <div class="post-meta">
+            <span class="post-date">
+              <span class="day">{{ post.date?.day || '15' }}</span>
+              <span class="month">{{ post.date?.month || 'Jun' }}</span>
+              <span class="year">{{ post.date?.year || '2023' }}</span>
+            </span>
+            <span class="post-author">{{ post.author || 'Автор неизвестен' }}</span>
+          </div>
+          
+          <h1 class="post-title">{{ post.title || 'Название поста' }}</h1>
+          
+          <div class="post-stats">
+            <span class="stat-item">
+              <i class="far fa-eye"></i> {{ post.views || 0 }}
+            </span>
+            <span class="stat-item">
+              <i class="far fa-heart"></i> {{ post.likes || 0 }}
+            </span>
+            <span class="stat-item">
+              <i class="far fa-comment"></i> {{ post.comments?.length || 0 }}
+            </span>
+          </div>
+        </div>
+
+        <div class="post-content">
+          <div class="post-image" v-if="post.image">
+            <img :src="post.image" :alt="post.title">
+          </div>
+          
+          <div class="post-body">
+            <p v-for="(paragraph, index) in post.body.split('\n')" :key="index">
+              {{ paragraph }}
+            </p>
+          </div>
+          
+          <div class="post-tags" v-if="post.tags?.length">
+            <span class="tag" v-for="tag in post.tags" :key="tag">
+              #{{ tag }}
+            </span>
+          </div>
+        </div>
+
+        <div class="post-actions">
+          <button class="action-btn like-btn">
+            <i class="far fa-heart"></i> Нравится
+          </button>
+          <button class="action-btn bookmark-btn">
+            <i class="far fa-bookmark"></i> Сохранить
+          </button>
+          <NuxtLink to="/posts" class="action-btn back-btn">
+            <i class="fas fa-arrow-left"></i> Назад к статьям
+          </NuxtLink>
+        </div>
+
+        <div class="post-comments" v-if="post.comments?.length">
+          <h3 class="comments-title">Комментарии ({{ post.comments.length }})</h3>
+          <div class="comment" v-for="comment in post.comments" :key="comment.id">
+            <div class="comment-author">{{ comment.author }}</div>
+            <div class="comment-text">{{ comment.text }}</div>
+            <div class="comment-date">{{ comment.date }}</div>
+          </div>
+        </div>
+      </div>
       
       <div class="actions">
         <NuxtLink to="/posts">← Назад</NuxtLink>
-        <button @click="deletePost">Удалить</button>
+        <NuxtLink :to="`/posts/edit-${post.id}`" class="button">Редактировать </NuxtLink>
       </div>
     </div>
     
@@ -52,21 +115,6 @@ const fetchPost = async () => {
     console.error('Ошибка загрузки:', err)
   } finally {
     loading.value = false
-  }
-}
-
-// Функция удаления
-const deletePost = async () => {
-  if (confirm('Удалить этот пост?')) {
-    try {
-      await fetch(`http://localhost:3001/posts/${route.params.id}`, {
-        method: 'DELETE'
-      })
-      router.push('/posts')
-    } catch (err) {
-      console.error('Ошибка удаления:', err)
-      alert('Не удалось удалить пост')
-    }
   }
 }
 

@@ -1,0 +1,45 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css);
+$regal-blue: #034378;
+$san-juan: #2d4e68;
+$bermuda: #77d7b9;
+$white: #fff;
+$black: #000;
+
+
+$lightBlue: darken(#EAFBFF, 50%);
+$darkBlue: #208FF9;
+$primary-color: #00c58e;
+$secondary-color: #2f495e;
+$heading-color: #1a365d;
+$bg-dark: #1e1e1e; 
+$bg-light: #2a2a2abe;
+$text-primary: #e0e0e0;
+$text-secondary: #a0a0a0;
+$border-color: #3a3a3a;
+
+$navPosX: 80%;
+$navPosY: 5%;
+
+$numOfItems: 3;
+$navAT: 1s;
+$textDelayStep: 0.1s;
+
+$btnSize: 70px;
+$lineW: 28px;
+$lineH: 4px;
+$linesGap: 10px;
+$linesTotalH: $lineH*2 + $linesGap;
+$btnHorPad: ($btnSize - $lineW) / 2;
+$btnVertPad: ($btnSize - $linesTotalH) / 2;
+
+
+$itemsLeftPad: 20px;
+$itemsRightPad: $itemsLeftPad + $btnSize;
+$itemWidth: 100px;
+$navItemsWidth: $itemsLeftPad + $itemsRightPad + $itemWidth * $numOfItems;
+
+$textAT: $navAT - $textDelayStep * ($numOfItems - 1);
+$textFadeAT: 0.2s;
+$cub: cubic-bezier(.48,.43,.29,1.3);
+$backCub: cubic-bezier(0.49,-0.5,.68,-1.23);
+$textCub: cubic-bezier(.48,.43,.7,2.5);

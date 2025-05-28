@@ -1,12 +1,16 @@
 <template>
-    <div>
-        <Header />
-        <h1>Все посты</h1>
-        <PostCard
-            v-for="post in posts"
-            :key="post.id"
-            :post="post"
-        />
+    <Header />
+    <div class="main-container">
+        <div class="main-page">
+            <h1 class="main-page__title">Все посты</h1>
+            <div class="main-page__posts">
+                <PostCard
+                    v-for="post in posts "
+                    :key="post.id"
+                    :post="post"
+                />
+            </div>
+        </div>
     </div>
 </template>
 

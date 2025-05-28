@@ -1,6 +1,110 @@
 <template>
-    <div>
-        <Header />
-        <h1>Все посты</h1>
+    <Header />
+    <div class="edit-page">
+        
+        <div class="edit-container">
+            <h1 class="page-title">Редактировать пост</h1>
+            
+            <form @submit.prevent="submitForm" class="post-form" v-if="post">
+                <div class="form-group">
+                <label for="title" class="form-label">Заголовок</label>
+                <input 
+                    v-model="post.title" 
+                    type="text" 
+                    id="title" 
+                    required
+                    class="form-input"
+                    placeholder="Введите заголовок поста"
+                >
+                </div>
+                
+                <div class="form-group">
+                <label for="body" class="form-label">Содержание</label>
+                <textarea 
+                    v-model="post.body" 
+                    id="body" 
+                    required
+                    class="form-textarea"
+                    placeholder="Напишите содержание вашего поста..."
+                    rows="8"
+                ></textarea>
+                </div>
+
+                <div class="form-group">
+                <label for="tags" class="form-label">Теги (через запятую)</label>
+                <input 
+                    v-model="post.tagsString" 
+                    type="text" 
+                    id="tags" 
+                    class="form-input"
+                    placeholder="Unreal Engine, Графика, Геймдизайн"
+                >
+                </div>
+                
+                <div class="form-actions">
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i> Сохранить изменения
+                </button>
+                
+                <NuxtLink :to="`/posts/${post.id}`" class="cancel-btn">
+                    <i class="fas fa-times"></i> Отмена
+                </NuxtLink>
+
+                <button type="button" class="delete-btn" @click="deletePost">
+                    <i class="fas fa-trash-alt"></i> Удалить пост
+                </button>
+                
+                </div>
+            </form>
+
+            <div class="loading" v-else>
+                Загрузка данных поста...
+            </div>
+        </div>
     </div>
+    <Footer />
 </template>
+
+<script setup>
+const route = useRoute()
+const router = useRouter()
+const post = ref(null)
+const loading = ref(true)
+const error = ref(null)
+
+const fetchPost = async () => {
+  try {
+    loading.value = true
+    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`)
+    
+    if (!response.ok) {
+      throw new Error('Пост не найден')
+    }
+    
+    post.value = await response.json()
+  } catch (err) {
+    error.value = err.message
+    console.error('Ошибка загрузки:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+// Загружаем данные при монтировании компонента
+onMounted(fetchPost)
+
+// Функция удаления
+const deletePost = async () => {
+  if (confirm('Удалить этот пост?')) {
+    try {
+      await fetch(`http://localhost:3001/posts/${route.params.id}`, {
+        method: 'DELETE'
+      })
+      router.push('/posts')
+    } catch (err) {
+      console.error('Ошибка удаления:', err)
+      alert('Не удалось удалить пост')
+    }
+  }
+}
+</script>
