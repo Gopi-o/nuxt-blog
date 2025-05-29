@@ -54,32 +54,45 @@
         </div>
 
         <div class="post-actions">
-          <button class="action-btn like-btn">
-            <i class="far fa-heart"></i> Нравится
+          <button class="action-btn like-btn" @click="likeBtn">
+            <i :class="[isLiked ? 'fas fa-heart' : 'far fa-heart']"></i>
+            {{ isLiked ? 'Понравилось' : 'Нравится' }}
           </button>
-          <button class="action-btn bookmark-btn">
+          <button class="action-btn bookmark-btn" @click="bookmarkBtn">
             <i class="far fa-bookmark"></i> Сохранить
           </button>
           <NuxtLink to="/posts" class="action-btn back-btn">
             <i class="fas fa-arrow-left"></i> Назад к статьям
           </NuxtLink>
         </div>
-
-        <div class="post-comments" v-if="post.comments?.length">
-          <h3 class="comments-title">Комментарии ({{ post.comments.length }})</h3>
-          <div class="comment" v-for="comment in post.comments" :key="comment.id">
-            <div class="comment-author">{{ comment.author }}</div>
-            <div class="comment-text">{{ comment.text }}</div>
-            <div class="comment-date">{{ comment.date }}</div>
-          </div>
-        </div>
       </div>
       
       <div class="actions">
-        <NuxtLink to="/posts">← Назад</NuxtLink>
         <NuxtLink :to="`/posts/edit-${post.id}`" class="button">Редактировать </NuxtLink>
       </div>
+      <div class="comments-section">
+        <h3 class="comments-heading">Обсуждение</h3>
+  
+        <form class="comment-form" @submit.prevent="submitComment">
+          <textarea
+            v-model="newComment.text"
+            placeholder="Ваш коментарий"
+            class="comment-input"
+            rows="3">
+          </textarea>
+          <button class="comment-submit"><i class="fa fa-filter"></i></button>
+        </form>
+      </div>
+
+      <div class="comments-list">
+        <CommentBox
+          v-for="comment in comments"
+          :key="comment.id"
+          :comment="comment"
+        />
+      </div>
     </div>
+
     
     <!-- Пост не найден -->
     <div v-else>
@@ -93,11 +106,45 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+
 const route = useRoute()
 const router = useRouter()
 const post = ref(null)
 const loading = ref(true)
 const error = ref(null)
+
+const { data: comments } = await useLazyAsyncData(
+  'comments',
+  () => $fetch(`http://localhost:3001/comments`)
+)
+
+
+const newComment = reactive({
+  date: '2023-06-15T14:30:00',
+  text: '',
+  author: 'Mentos'
+})
+
+const submitComment = async () => {
+  try {
+    await $fetch(`http://localhost:3001/comments`, {
+      method: 'POST',
+      body: {
+        date: newComment.date,
+        text: newComment.text,
+        author: newComment.author
+      }
+    })
+    newComment.text = '';
+    await refreshNuxtData();
+  } catch (error) {
+   console.error('Ошибка при создании коментария:', error) 
+  }
+}
+
+const isLiked = ref(false);
+
+
 
 // Функция загрузки поста
 const fetchPost = async () => {
@@ -118,7 +165,31 @@ const fetchPost = async () => {
   }
 }
 
-// Загружаем данные при монтировании компонента
+const likeBtn = async () => {
+  try{
+    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`)
+    const post = await response.json();
+    const currentLikes = post.likes || 0;
+
+    const updatedLikes = currentLikes + 1;
+    if(!isLiked.value){
+      const increment = await fetch(`http://localhost:3001/posts/${route.params.id}`, {
+        method: 'PATCH',
+        headers: {
+          'content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          likes: updatedLikes
+        })
+      })
+    }
+    isLiked.value = !isLiked.value;
+  } catch (err) {
+    console.error('Ошибка', err)
+  }
+}
+
+
 onMounted(fetchPost)
 </script>
 

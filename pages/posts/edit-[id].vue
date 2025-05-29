@@ -33,7 +33,7 @@
                 <div class="form-group">
                 <label for="tags" class="form-label">Теги (через запятую)</label>
                 <input 
-                    v-model="post.tagsString" 
+                    v-model="post.tags" 
                     type="text" 
                     id="tags" 
                     class="form-input"
@@ -42,7 +42,7 @@
                 </div>
                 
                 <div class="form-actions">
-                <button type="submit" class="submit-btn">
+                <button type="submit" class="submit-btn" @click="submitPost">
                     <i class="fas fa-save"></i> Сохранить изменения
                 </button>
                 
@@ -72,6 +72,12 @@ const post = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
+const formData = ref({
+  title: '',
+  body: '',
+  tags: ''
+})
+
 const fetchPost = async () => {
   try {
     loading.value = true
@@ -89,9 +95,33 @@ const fetchPost = async () => {
     loading.value = false
   }
 }
-
 // Загружаем данные при монтировании компонента
 onMounted(fetchPost)
+
+const updatePost = async () => {
+  try {
+    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: post.value.title,
+        body: post.value.body,
+        tags: post.value.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+      })
+    })
+
+    const updatedPost = await response.json();
+    console.log('Пост обновлен:', updatedPost);
+  } catch(error) {
+    console.log('Ошибка:', error);
+  }
+}
+
+const submitForm = () => updatePost();
+
+
 
 // Функция удаления
 const deletePost = async () => {
