@@ -12,15 +12,6 @@ body {
   padding: 0;
   overflow-x: hidden;
 
-  &:before,
-  &:after {
-    content: "";
-    position: fixed;
-    width: 100%;
-    height: 50%;
-    left: 0;
-    z-index: -1;
-  }
 }
 
 html, body {
@@ -241,9 +232,22 @@ html, body {
   padding: 60px 20px;
   position: relative;
   z-index: 1;
+  height: 100%;
 
+
+  &__posts{
+    .posts-container {
+      height: 100vh;
+      margin-bottom: 4rem;
+      &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+      }
+    }
+  }
   .main-page {
-    
     &__title {
       justify-items: center;
       font-size: 2.5rem;
@@ -272,9 +276,9 @@ html, body {
     
     &__posts {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 2rem;
-      margin-bottom: 4rem;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
     }
     
     &__all-links {

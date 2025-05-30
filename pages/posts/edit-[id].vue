@@ -114,6 +114,7 @@ const updatePost = async () => {
 
     const updatedPost = await response.json();
     console.log('Пост обновлен:', updatedPost);
+    router.push(`/posts/${route.params.id}`);
   } catch(error) {
     console.log('Ошибка:', error);
   }

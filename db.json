@@ -28,7 +28,7 @@
         "month": "Apr",
         "year": "2023"
       },
-      "likes": "11",
+      "likes": "111",
       "comments": 9,
       "tags": [
         "Unity",
@@ -46,7 +46,7 @@
         "month": "May",
         "year": "2023"
       },
-      "likes": 102,
+      "likes": 104,
       "comments": 21,
       "tags": [
         "Кинематография",
@@ -112,6 +112,41 @@
       "id": "92de",
       "title": "Новый пост из Postman",
       "body": "Содержание"
+    },
+    {
+      "id": "5803",
+      "title": "Пост про синематик",
+      "body": "Это текст про то как создавать синематики в нереальном движке под названием unreal engine 5.5. \nЭто движок на котором можно делать очень хорошие проекты.",
+      "tags": [
+        "Unreal Engine",
+        "Туториал"
+      ],
+      "author": "Новый пользователь",
+      "date": {
+        "day": 30,
+        "month": "май",
+        "year": 2025
+      },
+      "likes": 1,
+      "comments": 0,
+      "views": 0
+    },
+    {
+      "id": "46d7",
+      "title": "тест1",
+      "body": "https://avatars.mds.yandex.net/i?id=b5c9ba6179133899aa78d2a00319eb4505144fd8-10697312-images-thumbs&n=13",
+      "tags": [
+        "тест"
+      ],
+      "author": "Новый пользователь",
+      "date": {
+        "day": 30,
+        "month": "май",
+        "year": 2025
+      },
+      "likes": 0,
+      "comments": 0,
+      "views": 0
     }
   ],
   "comments": [

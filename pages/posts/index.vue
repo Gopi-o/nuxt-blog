@@ -3,12 +3,8 @@
     <div class="main-container">
         <div class="main-page">
             <h1 class="main-page__title">Все посты</h1>
-            <div class="main-page__posts">
-                <PostCard
-                    v-for="post in posts "
-                    :key="post.id"
-                    :post="post"
-                />
+            <div class="main-container__posts">
+                <PostList :posts="posts" />
             </div>
         </div>
     </div>
@@ -17,6 +13,10 @@
 
 <script setup>
 import { useFetch } from 'nuxt/app';
+// const { data: posts } = await useFetch('http://localhost:3001/posts');
+const postsPerPage = ref(5);
 
-const { data: posts } = await useFetch('http://localhost:3001/posts')
+
+const page = ref(1);
+const { data: posts } = await useFetch(`http://localhost:3001/posts?page=${page.value}&limit=6`);
 </script>
