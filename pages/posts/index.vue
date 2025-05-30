@@ -12,11 +12,14 @@
 </template>
 
 <script setup>
-import { useFetch } from 'nuxt/app';
 // const { data: posts } = await useFetch('http://localhost:3001/posts');
 const postsPerPage = ref(5);
 
 
 const page = ref(1);
-const { data: posts } = await useFetch(`http://localhost:3001/posts?page=${page.value}&limit=6`);
+
+const { data: posts, panding, error, refresh } = await useAsyncData (
+    'posts',
+    () => $fetch(`http://localhost:3001/posts?page=${page.value}&limit=6`)
+);
 </script>
