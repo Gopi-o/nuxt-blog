@@ -67,7 +67,7 @@ const router = useRouter()
 
 const submitForm = async () => {
   try {
-    await $fetch('http://localhost:3001/posts', {
+    await $fetch('http://localhost:3001/api/posts', {
       method: 'POST',
       body: {
         title: formData.title,

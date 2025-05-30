@@ -2,17 +2,15 @@
   "name": "nuxt-blog",
   "type": "module",
   "dependencies": {
-    "nuxt": "^3.17.4"
+    "nuxt": "^3.17.4",
+    "sass": "^1.32.13",
+    "sass-loader": "^10.2.1"
   },
   "scripts": {
     "dev": "nuxt dev",
+    "dev:all": "concurrently \"cd ../nuxt-blog-api && npm run dev\" \"npm run dev\"",
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview"
-  },
-  "devDependencies": {
-    "sass": "^1.89.0",
-    "sass-embedded": "^1.89.0",
-    "sass-loader": "^16.0.5"
   }
 }

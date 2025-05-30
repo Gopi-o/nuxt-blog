@@ -14,12 +14,13 @@
 <script setup>
 // const { data: posts } = await useFetch('http://localhost:3001/posts');
 const postsPerPage = ref(5);
-
-
 const page = ref(1);
+
+const runtimeConfig = useRuntimeConfig()
+const apiBase = runtimeConfig.public.apiBase || 'http://localhost:3001'
 
 const { data: posts, panding, error, refresh } = await useAsyncData (
     'posts',
-    () => $fetch(`http://localhost:3001/posts?page=${page.value}&limit=6`)
+    () => $fetch(`${apiBase}/posts?page=${page.value}&limit=6`)
 );
 </script>

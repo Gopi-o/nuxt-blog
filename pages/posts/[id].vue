@@ -103,19 +103,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
 
 const route = useRoute()
-const router = useRouter()
+const runtimeConfig = useRuntimeConfig()
+const apiBase = runtimeConfig.public.apiBase || 'http://localhost:3001'
+
+
 const post = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
+
+
+
+
 const { data: comments } = await useLazyAsyncData(
   'comments',
-  () => $fetch(`http://localhost:3001/comments`)
+  () => $fetch(`${apiBase}/comments`)
 )
 
 
@@ -127,7 +131,7 @@ const newComment = reactive({
 
 const submitComment = async () => {
   try {
-    await $fetch(`http://localhost:3001/comments`, {
+    await $fetch(`${apiBase}/comments`, {
       method: 'POST',
       body: {
         date: newComment.date,
@@ -150,7 +154,7 @@ const isLiked = ref(false);
 const fetchPost = async () => {
   try {
     loading.value = true
-    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`)
+    const response = await fetch(`${apiBase}/posts/${route.params.id}`)
     
     if (!response.ok) {
       throw new Error('Пост не найден')
@@ -167,13 +171,13 @@ const fetchPost = async () => {
 
 const likeBtn = async () => {
   try{
-    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`)
+    const response = await fetch(`${apiBase}/posts/${route.params.id}`)
     const post = await response.json();
     const currentLikes = post.likes || 0;
 
     const updatedLikes = currentLikes + 1;
     if(!isLiked.value){
-      const increment = await fetch(`http://localhost:3001/posts/${route.params.id}`, {
+      const increment = await fetch(`${apiBase}/posts/${route.params.id}`, {
         method: 'PATCH',
         headers: {
           'content-Type': 'application/json'
