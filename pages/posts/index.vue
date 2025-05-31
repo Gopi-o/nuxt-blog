@@ -3,7 +3,7 @@
     <div class="main-container">
         <div class="main-page">
             <h1 class="main-page__title">Все посты</h1>
-            <div class="main-container__posts">
+            <div class="main-container">
                 <PostList :posts="posts" />
             </div>
         </div>

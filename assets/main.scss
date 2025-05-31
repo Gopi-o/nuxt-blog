@@ -224,6 +224,16 @@ html, body {
   }
 }
 
+.posts-container {
+      height: 100vh;
+      margin-bottom: 4rem;
+      &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+      }
+    }
 
 // main-container (главная страница)
 .main-container {
@@ -236,16 +246,10 @@ html, body {
 
 
   &__posts{
-    .posts-container {
-      height: 100vh;
-      margin-bottom: 4rem;
-      &__grid {
-        display: grid;
+    display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 2rem;
         margin-bottom: 4rem;
-      }
-    }
   }
   .main-page {
     &__title {

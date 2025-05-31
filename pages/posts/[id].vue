@@ -92,13 +92,14 @@
         />
       </div>
     </div>
-
+    
     
     <!-- Пост не найден -->
     <div v-else>
       <h2>Пост не найден</h2>
       <NuxtLink to="/posts">Вернуться к списку</NuxtLink>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -108,7 +109,7 @@ const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 const apiBase = runtimeConfig.public.apiBase || 'http://localhost:3001'
 
-
+const filteredComments = ref([])
 const post = ref(null)
 const loading = ref(true)
 const error = ref(null)
@@ -119,14 +120,15 @@ const error = ref(null)
 
 const { data: comments } = await useLazyAsyncData(
   'comments',
-  () => $fetch(`${apiBase}/comments`)
+  () => $fetch(`${apiBase}/comments?postId=${route.params.id}`)
 )
 
 
 const newComment = reactive({
   date: '2023-06-15T14:30:00',
+  postId: '1',
   text: '',
-  author: 'Mentos'
+  author: 'Mentos',
 })
 
 const submitComment = async () => {
@@ -134,7 +136,8 @@ const submitComment = async () => {
     await $fetch(`${apiBase}/comments`, {
       method: 'POST',
       body: {
-        date: newComment.date,
+        postId: route.params.id,
+        date: Date.now(),
         text: newComment.text,
         author: newComment.author
       }
