@@ -24,6 +24,7 @@ html, body {
 
 .header {
   position: relative;
+  overflow-x: hidden;
   width: 100%;
   min-height: $btnSize + 20px; 
   display: flex;
@@ -224,6 +225,15 @@ html, body {
   }
 }
 
+.posts-container {
+      margin-bottom: 4rem;
+      &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+      }
+    }
 
 // main-container (главная страница)
 .main-container {
@@ -236,16 +246,10 @@ html, body {
 
 
   &__posts{
-    .posts-container {
-      height: 100vh;
-      margin-bottom: 4rem;
-      &__grid {
-        display: grid;
+    display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 2rem;
         margin-bottom: 4rem;
-      }
-    }
   }
   .main-page {
     &__title {
@@ -1087,5 +1091,140 @@ html, body {
   }
   100% {
     box-shadow: 0 0 0 0 rgba($primary-color, 0);
+  }
+}
+
+
+@media (max-width: 768px) {
+
+
+  .header {
+    padding: 0 15px;
+    justify-content: center;
+
+  }
+
+  .main-container {
+    padding: 30px 15px;
+    
+    &__posts, .main-page__posts, .posts-container__grid {
+        display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+  }
+
+  .post-card {
+    padding: 0 0.7rem;
+    
+    .card {
+      width: 100%;
+      
+      .wrapper {
+        min-height: 400px;
+      }
+    }
+  }
+
+  .post-detail {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+    
+    .post-header {
+      .post-title {
+        font-size: 1.5rem;
+      }
+      
+      .post-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .post-stats {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+    
+    .post-actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .create-container, .edit-container {
+    padding: 0 15px;
+  }
+
+  .post-form {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+    
+    button {
+      width: 100%;
+    }
+  }
+
+  .comments-section {
+    padding: 1.5rem;
+    margin: 2rem auto;
+    
+    .comment-form {
+      padding: 1rem;
+    }
+    
+    .comment-item {
+      padding: 1rem;
+    }
+  }
+
+
+
+}
+
+// Дополнительные стили для очень маленьких экранов
+@media (max-width: 480px) {
+  .post-card {
+    .card {
+      .wrapper {
+        min-height: 350px;
+      }
+      
+      .data {
+        .content {
+          padding: 0.8em;
+        }
+      }
+    }
+  }
+  
+  .post-detail {
+    padding: 1rem;
+    
+    .post-header {
+      .post-title {
+        font-size: 1.3rem;
+      }
+    }
+  }
+  
+  .comments-section {
+    padding: 1rem;
+    
+    .comment-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
   }
 }

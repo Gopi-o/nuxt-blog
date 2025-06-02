@@ -64,24 +64,3 @@ watch(currentPage, (newPage) => {
   });
 });
 </script>
-
-<style scoped>
-.posts-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-@media (max-width: 768px) {
-  .posts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

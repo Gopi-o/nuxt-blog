@@ -64,10 +64,12 @@ const formData = reactive({
 })
 
 const router = useRouter()
+const runtimeConfig = useRuntimeConfig()
+const apiBase = runtimeConfig.public.apiBase || 'http://localhost:3001'
 
 const submitForm = async () => {
   try {
-    await $fetch('http://localhost:3001/posts', {
+    await $fetch(`${apiBase}/posts`, {
       method: 'POST',
       body: {
         title: formData.title,

@@ -71,6 +71,8 @@ const router = useRouter()
 const post = ref(null)
 const loading = ref(true)
 const error = ref(null)
+const runtimeConfig = useRuntimeConfig()
+const apiBase = runtimeConfig.public.apiBase || 'http://localhost:3001'
 
 const formData = ref({
   title: '',
@@ -81,7 +83,7 @@ const formData = ref({
 const fetchPost = async () => {
   try {
     loading.value = true
-    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`)
+    const response = await fetch(`${apiBase}/posts/${route.params.id}`)
     
     if (!response.ok) {
       throw new Error('Пост не найден')
@@ -100,7 +102,7 @@ onMounted(fetchPost)
 
 const updatePost = async () => {
   try {
-    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`, {
+    const response = await fetch(`${apiBase}/posts/${route.params.id}`, {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json'
@@ -128,7 +130,7 @@ const submitForm = () => updatePost();
 const deletePost = async () => {
   if (confirm('Удалить этот пост?')) {
     try {
-      await fetch(`http://localhost:3001/posts/${route.params.id}`, {
+      await fetch(`${apiBase}/posts/${route.params.id}`, {
         method: 'DELETE'
       })
       router.push('/posts')

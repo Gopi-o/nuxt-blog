@@ -24,15 +24,22 @@
 
 <script setup>
 
-const {data: posts, pending } = await useAsyncData(
-    'main-posts',
-    () => $fetch(`http://localhost:3001/posts?_sort=createdAt&_order=desc&_limit=3`)
-)
+const runtimeConfig = useRuntimeConfig()
+const apiBase = runtimeConfig.public.apiBase || 'http://localhost:3001'
+const { getPosts } = useApi();
+
+const { data: posts } = await useAsyncData(
+  'main-posts',
+  () => getPosts({ 
+    sort: 'createdAt', 
+    order: 'desc', 
+    limit: 3 
+  })
+);
 
 const latestPosts = computed(() => posts.value || [])
 </script>
 
 <style lang="scss">
-
     @import "/assets/main.scss"
 </style>

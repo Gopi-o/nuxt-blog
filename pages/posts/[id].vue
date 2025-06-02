@@ -92,45 +92,52 @@
         />
       </div>
     </div>
-
+    
     
     <!-- Пост не найден -->
     <div v-else>
       <h2>Пост не найден</h2>
       <NuxtLink to="/posts">Вернуться к списку</NuxtLink>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
 
 const route = useRoute()
-const router = useRouter()
+const runtimeConfig = useRuntimeConfig()
+const apiBase = runtimeConfig.public.apiBase || 'http://localhost:3001'
+
+const filteredComments = ref([])
 const post = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
+
+
+
+
 const { data: comments } = await useLazyAsyncData(
   'comments',
-  () => $fetch(`http://localhost:3001/comments`)
+  () => $fetch(`${apiBase}/comments?postId=${route.params.id}`)
 )
 
 
 const newComment = reactive({
   date: '2023-06-15T14:30:00',
+  postId: '1',
   text: '',
-  author: 'Mentos'
+  author: 'Mentos',
 })
 
 const submitComment = async () => {
   try {
-    await $fetch(`http://localhost:3001/comments`, {
+    await $fetch(`${apiBase}/comments`, {
       method: 'POST',
       body: {
-        date: newComment.date,
+        postId: route.params.id,
+        date: Date.now(),
         text: newComment.text,
         author: newComment.author
       }
@@ -150,7 +157,7 @@ const isLiked = ref(false);
 const fetchPost = async () => {
   try {
     loading.value = true
-    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`)
+    const response = await fetch(`${apiBase}/posts/${route.params.id}`)
     
     if (!response.ok) {
       throw new Error('Пост не найден')
@@ -167,13 +174,13 @@ const fetchPost = async () => {
 
 const likeBtn = async () => {
   try{
-    const response = await fetch(`http://localhost:3001/posts/${route.params.id}`)
+    const response = await fetch(`${apiBase}/posts/${route.params.id}`)
     const post = await response.json();
     const currentLikes = post.likes || 0;
 
     const updatedLikes = currentLikes + 1;
     if(!isLiked.value){
-      const increment = await fetch(`http://localhost:3001/posts/${route.params.id}`, {
+      const increment = await fetch(`${apiBase}/posts/${route.params.id}`, {
         method: 'PATCH',
         headers: {
           'content-Type': 'application/json'
@@ -184,6 +191,7 @@ const likeBtn = async () => {
       })
     }
     isLiked.value = !isLiked.value;
+    await refreshNuxtData();
   } catch (err) {
     console.error('Ошибка', err)
   }
