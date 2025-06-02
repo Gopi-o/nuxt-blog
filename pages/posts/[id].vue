@@ -191,6 +191,7 @@ const likeBtn = async () => {
       })
     }
     isLiked.value = !isLiked.value;
+    await refreshNuxtData();
   } catch (err) {
     console.error('Ошибка', err)
   }
